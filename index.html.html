@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildIt — 24hr Hackathon</title>
+<meta name="description" content="BuildIt is a 24-hour hackathon by Mozilla Firefox Club. Form a team, ship something real, show it off.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0A0A16;
+    --surface:#13122A;
+    --surface-raised:#1B1A38;
+    --line:#2C2A54;
+    --periwinkle:#8B7FD6;
+    --lavender:#B79CFF;
+    --violet-glow:#5A3FC0;
+    --text:#EDE9FF;
+    --text-muted:#9089B8;
+    --text-dim:#5F5A84;
+    --success:#7FE0B8;
+    --warn:#E0B87F;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--void);
+    color:var(--text);
+    font-family:var(--font-display);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;}
+
+  ::selection{background:var(--violet-glow); color:var(--text);}
+
+  :focus-visible{
+    outline:2px solid var(--lavender);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(10,10,22,0.72);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1080px;
+    margin:0 auto;
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--lavender);
+    box-shadow:0 0 12px 2px var(--lavender);
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    font-size:0.94rem;
+  }
+  .nav-links a{
+    text-decoration:none;
+    color:var(--text-muted);
+    transition:color 0.15s ease;
+    padding:4px 0;
+  }
+  .nav-links a:hover, .nav-links a.active{color:var(--text);}
+  .nav-toggle{display:none;}
+
+  @media (max-width:720px){
+    .nav-links{
+      position:fixed;
+      top:60px; left:0; right:0;
+      flex-direction:column;
+      background:var(--surface);
+      padding:20px 32px;
+      gap:16px;
+      border-bottom:1px solid var(--line);
+      transform:translateY(-120%);
+      transition:transform 0.25s ease;
+    }
+    .nav-links.open{transform:translateY(0);}
+    .nav-toggle{
+      display:block;
+      background:none;
+      border:1px solid var(--line);
+      color:var(--text);
+      width:36px;height:36px;
+      border-radius:8px;
+      font-size:1.1rem;
+      cursor:pointer;
+    }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding-top:80px;
+    overflow:hidden;
+  }
+  #circuit{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    opacity:0.55;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 32px;
+    width:100%;
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:48px;
+    align-items:center;
+  }
+  .hero-eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--lavender);
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-eyebrow::before{
+    content:'';
+    width:20px;height:1px;
+    background:var(--lavender);
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 6vw, 4.4rem);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.02;
+    background:linear-gradient(135deg, #F4F1FF 20%, var(--lavender) 65%, var(--periwinkle) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.lede{
+    margin-top:22px;
+    max-width:46ch;
+    font-size:1.08rem;
+    color:var(--text-muted);
+  }
+  .hero-ctas{
+    margin-top:34px;
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--font-display);
+    font-size:0.95rem;
+    font-weight:600;
+    padding:13px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    border:1px solid transparent;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--periwinkle), var(--violet-glow));
+    color:#fff;
+    box-shadow:0 0 0 0 rgba(139,127,214,0.6);
+  }
+  .btn-primary:hover{
+    box-shadow:0 4px 24px -4px rgba(139,127,214,0.7);
+    transform:translateY(-1px);
+  }
+  .btn-ghost{
+    background:transparent;
+    border-color:var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--periwinkle); background:rgba(139,127,214,0.08);}
+
+  .countdown-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:28px;
+  }
+  .countdown-card h3{
+    font-size:0.82rem;
+    color:var(--text-muted);
+    font-weight:500;
+    margin-bottom:18px;
+  }
+  .countdown-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+  }
+  .countdown-unit{text-align:center;}
+  .countdown-unit .num{
+    font-family:var(--font-mono);
+    font-size:1.7rem;
+    font-weight:600;
+    color:var(--lavender);
+  }
+  .countdown-unit .label{
+    font-size:0.7rem;
+    color:var(--text-dim);
+    margin-top:4px;
+  }
+  .countdown-meta{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid var(--line);
+    font-size:0.85rem;
+    color:var(--text-muted);
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .countdown-meta span{color:var(--text);}
+
+  @media (max-width:820px){
+    .hero-inner{grid-template-columns:1fr;}
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{
+    padding:110px 0;
+    position:relative;
+  }
+  .section-head{
+    margin-bottom:52px;
+    max-width:56ch;
+  }
+  .section-head h2{
+    font-size:clamp(1.7rem, 3.4vw, 2.3rem);
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    margin-top:12px;
+    color:var(--text-muted);
+    font-size:1.02rem;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:start;
+  }
+  .about-grid p{color:var(--text-muted); font-size:1.02rem; margin-bottom:16px; max-width:58ch;}
+  .stat-list{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  .stat-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:18px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .stat-row .k{color:var(--text-muted); font-size:0.95rem;}
+  .stat-row .v{font-family:var(--font-mono); color:var(--lavender); font-size:1.1rem; font-weight:600;}
+
+  @media (max-width:820px){.about-grid{grid-template-columns:1fr; gap:32px;}}
+
+  /* ---------- TIMELINE ---------- */
+  .timeline{
+    position:relative;
+    padding-left:32px;
+    border-left:1px solid var(--line);
+  }
+  .tl-item{
+    position:relative;
+    padding-bottom:36px;
+  }
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:'';
+    position:absolute;
+    left:-37px; top:4px;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--void);
+    border:2px solid var(--periwinkle);
+  }
+  .tl-time{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    color:var(--lavender);
+    margin-bottom:4px;
+  }
+  .tl-title{font-weight:600; font-size:1.05rem;}
+  .tl-desc{color:var(--text-muted); font-size:0.94rem; margin-top:4px; max-width:52ch;}
+
+  /* ---------- TEAMS ---------- */
+  .panel-toggle{
+    display:flex;
+    gap:10px;
+    margin-bottom:36px;
+    flex-wrap:wrap;
+  }
+  .tab-btn{
+    font-family:var(--font-display);
+    font-size:0.9rem;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text-muted);
+    cursor:pointer;
+    transition:all 0.15s ease;
+  }
+  .tab-btn.active{
+    background:var(--surface-raised);
+    color:var(--text);
+    border-color:var(--periwinkle);
+  }
+
+  .form-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:28px;
+    margin-bottom:36px;
+  }
+  .form-card h3{font-size:1.1rem; font-weight:600; margin-bottom:4px;}
+  .form-card .sub{color:var(--text-muted); font-size:0.9rem; margin-bottom:22px;}
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block;
+    font-size:0.85rem;
+    color:var(--text-muted);
+    margin-bottom:7px;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:var(--void);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 13px;
+    color:var(--text);
+    font-family:var(--font-display);
+    font-size:0.95rem;
+    transition:border-color 0.15s ease;
+  }
+  .field textarea{resize:vertical; min-height:80px;}
+  .field input:focus, .field textarea:focus{
+    outline:none;
+    border-color:var(--periwinkle);
+  }
+  .field-error{
+    color:var(--warn);
+    font-size:0.8rem;
+    margin-top:6px;
+    display:none;
+  }
+  .field.invalid input, .field.invalid textarea{border-color:var(--warn);}
+  .field.invalid .field-error{display:block;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:600px){.field-row{grid-template-columns:1fr;}}
+
+  .form-status{
+    font-size:0.88rem;
+    margin-top:14px;
+    color:var(--success);
+    display:none;
+  }
+  .form-status.show{display:block;}
+
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px, 1fr));
+    gap:18px;
+  }
+
+  .team-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-left:3px solid var(--periwinkle);
+    border-radius:10px;
+    padding:22px;
+  }
+  .team-card h4{font-size:1.05rem; font-weight:600; margin-bottom:6px;}
+  .team-card .idea{color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.74rem;
+    padding:4px 9px;
+    border-radius:5px;
+    background:rgba(139,127,214,0.12);
+    color:var(--lavender);
+    border:1px solid rgba(139,127,214,0.25);
+  }
+  .team-card .contact{
+    font-size:0.85rem;
+    color:var(--text-dim);
+    border-top:1px solid var(--line);
+    padding-top:12px;
+    margin-top:4px;
+  }
+  .team-card .contact span{color:var(--text-muted);}
+
+  .empty-state{
+    grid-column:1/-1;
+    text-align:center;
+    padding:50px 20px;
+    color:var(--text-dim);
+    border:1px dashed var(--line);
+    border-radius:12px;
+    font-size:0.95rem;
+  }
+
+  /* ---------- SHOWCASE ---------- */
+  .project-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .project-plate{
+    height:110px;
+    background:linear-gradient(135deg, var(--violet-glow), var(--periwinkle) 60%, var(--lavender));
+    position:relative;
+  }
+  .project-plate::after{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 24px),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 24px);
+  }
+  .project-body{padding:20px 22px 22px;}
+  .project-body h4{font-size:1.05rem; font-weight:600; margin-bottom:6px;}
+  .project-body .tagline{color:var(--text-muted); font-size:0.92rem; margin-bottom:14px;}
+  .project-links{
+    display:flex;
+    gap:14px;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    font-size:0.85rem;
+  }
+  .project-links a{
+    color:var(--lavender);
+    text-decoration:none;
+  }
+  .project-links a:hover{text-decoration:underline;}
+
+  /* ---------- PRIZES ---------- */
+  .prize-list{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:18px;
+    align-items:end;
+  }
+  .prize{
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:28px 24px;
+    background:var(--surface);
+  }
+  .prize.first{
+    background:linear-gradient(180deg, rgba(139,127,214,0.14), var(--surface) 60%);
+    border-color:var(--periwinkle);
+    padding:36px 26px;
+  }
+  .prize .place{
+    font-family:var(--font-mono);
+    font-size:0.8rem;
+    color:var(--text-dim);
+  }
+  .prize.first .place{color:var(--lavender);}
+  .prize .amount{
+    font-size:2rem;
+    font-weight:700;
+    margin:8px 0 6px;
+  }
+  .prize.first .amount{font-size:2.6rem;}
+  .prize .desc{color:var(--text-muted); font-size:0.88rem;}
+
+  @media (max-width:760px){
+    .prize-list{grid-template-columns:1fr;}
+    .prize.first{order:-1;}
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-item{
+    border-bottom:1px solid var(--line);
+  }
+  .faq-q{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    color:var(--text);
+    font-family:var(--font-display);
+    font-size:1rem;
+    font-weight:500;
+    padding:20px 0;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+  }
+  .faq-q .plus{
+    font-family:var(--font-mono);
+    color:var(--lavender);
+    font-size:1.2rem;
+    transition:transform 0.2s ease;
+    flex-shrink:0;
+  }
+  .faq-item.open .faq-q .plus{transform:rotate(45deg);}
+  .faq-a{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.25s ease;
+    color:var(--text-muted);
+    font-size:0.95rem;
+  }
+  .faq-a-inner{padding-bottom:20px; max-width:62ch;}
+  .faq-item.open .faq-a{max-height:200px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+    font-size:0.88rem;
+    color:var(--text-dim);
+  }
+  .footer-inner a{color:var(--text-muted); text-decoration:none;}
+  .footer-inner a:hover{color:var(--lavender);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><span class="logo-dot"></span>BuildIt</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#teams">Teams</a></li>
+      <li><a href="#showcase">Showcase</a></li>
+      <li><a href="#prizes">Prizes</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg id="circuit" viewBox="0 0 1080 760" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#8B7FD6"/>
+        <stop offset="100%" stop-color="#5A3FC0"/>
+      </linearGradient>
+    </defs>
+    <g fill="none" stroke="url(#lg1)" stroke-width="1.4" stroke-linecap="round">
+      <path class="wire" d="M -20 120 L 200 120 L 240 160 L 480 160 L 520 120 L 760 120 L 800 160 L 1100 160"/>
+      <path class="wire" d="M -20 260 L 140 260 L 180 300 L 380 300 L 420 260 L 700 260 L 740 220 L 1100 220"/>
+      <path class="wire" d="M -20 420 L 260 420 L 300 380 L 560 380 L 600 420 L 880 420 L 920 460 L 1100 460"/>
+      <path class="wire" d="M -20 560 L 180 560 L 220 600 L 460 600 L 500 560 L 820 560 L 860 600 L 1100 600"/>
+      <path class="wire" d="M -20 680 L 320 680 L 360 640 L 640 640 L 680 680 L 1100 680"/>
+    </g>
+    <g fill="#B79CFF">
+      <circle class="node" cx="240" cy="160" r="4"/>
+      <circle class="node" cx="520" cy="120" r="4"/>
+      <circle class="node" cx="800" cy="160" r="4"/>
+      <circle class="node" cx="180" cy="300" r="4"/>
+      <circle class="node" cx="420" cy="260" r="4"/>
+      <circle class="node" cx="740" cy="220" r="4"/>
+      <circle class="node" cx="300" cy="380" r="4"/>
+      <circle class="node" cx="600" cy="420" r="4"/>
+      <circle class="node" cx="920" cy="460" r="4"/>
+      <circle class="node" cx="220" cy="600" r="4"/>
+      <circle class="node" cx="500" cy="560" r="4"/>
+      <circle class="node" cx="860" cy="600" r="4"/>
+      <circle class="node" cx="360" cy="640" r="4"/>
+      <circle class="node" cx="680" cy="680" r="4"/>
+    </g>
+  </svg>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">24 hours · one campus · no sleep</div>
+      <h1>Build something<br>that didn't exist<br>yesterday.</h1>
+      <p class="lede">BuildIt is Mozilla Firefox Club's flagship hackathon — a weekend to find a team, pick a problem worth solving, and ship it. No theme restrictions. Bring whatever you're curious about.</p>
+      <div class="hero-ctas">
+        <a href="#teams" class="btn btn-primary">Find a team</a>
+        <a href="#showcase" class="btn btn-ghost">See past projects</a>
+      </div>
+    </div>
+
+    <div class="countdown-card">
+      <h3>Doors open in</h3>
+      <div class="countdown-grid" id="countdown">
+        <div class="countdown-unit"><div class="num" id="cd-days">00</div><div class="label">days</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-hours">00</div><div class="label">hours</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-mins">00</div><div class="label">mins</div></div>
+        <div class="countdown-unit"><div class="num" id="cd-secs">00</div><div class="label">secs</div></div>
+      </div>
+      <div class="countdown-meta">
+        <div>Nov 14–15, 2026 · <span>AB2 — Auditorium 1</span></div>
+        <div>Team size: <span>2–5 people</span></div>
+        <div>Entry fee: <span>₹75</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="section-head" style="margin-bottom:24px;">
+        <h2>What you're signing up for</h2>
+      </div>
+      <p>BuildIt runs for 24 straight hours. You show up Saturday morning with an idea or a blank page, form or join a team, and by Sunday afternoon you're demoing something real in front of judges.</p>
+      <p>There's no set theme and no restriction on tech stack — web apps, hardware hacks, games, ML experiments, browser extensions, anything you can finish in a day. We care more about whether you actually built it than how ambitious it sounds on paper.</p>
+      <p>Mentors from the club and a few local engineers will be around all night if you get stuck. Food, coffee, and a place to nap are covered.</p>
+    </div>
+    <div class="stat-list">
+      <div class="stat-row"><span class="k">Duration</span><span class="v">24 hrs</span></div>
+      <div class="stat-row"><span class="k">Expected teams</span><span class="v">150</span></div>
+      <div class="stat-row"><span class="k">Prize pool</span><span class="v">₹18K</span></div>
+      <div class="stat-row"><span class="k">Judging criteria</span><span class="v">5 areas</span></div>
+      <div class="stat-row"><span class="k">Cost to enter</span><span class="v">₹75</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="schedule">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Schedule</h2>
+      <p>Two days, roughly in this order. We'll post exact room assignments closer to the date.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">Sat · 9:00 AM</div>
+        <div class="tl-title">Check-in & team formation</div>
+        <div class="tl-desc">Grab your badge, meet people, use the board on this page if you still need teammates.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Sat · 10:30 AM</div>
+        <div class="tl-title">Opening & rules briefing</div>
+        <div class="tl-desc">Quick rundown of judging criteria, hardware checkout, and where to find mentors.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Sat · 11:00 AM</div>
+        <div class="tl-title">Building begins</div>
+        <div class="tl-desc">The clock starts. Mentors are on the floor for the full 24 hours.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Sun · 9:00 AM</div>
+        <div class="tl-title">Hacking ends</div>
+        <div class="tl-desc">Push your last commit. Submissions lock at 9:00 AM sharp.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Sun · 10:00 AM</div>
+        <div class="tl-title">Demos & judging</div>
+        <div class="tl-desc">Five minutes per team on the main stage, three minutes of judge questions.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">Sun · 1:00 PM</div>
+        <div class="tl-title">Awards</div>
+        <div class="tl-desc">Winners announced, prizes handed out, everyone goes home to sleep.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="teams">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Find or start a team</h2>
+      <p>Teams must have 2–5 people. Post your idea and the skills you're missing, or browse what other people are building. This board is saved on your device — post from the same browser you'll check back on.</p>
+    </div>
+
+    <div class="form-card">
+      <h3>Post your team</h3>
+      <div class="sub">Fill this in if you have an idea and need people, or just want to be findable.</div>
+      <form id="teamForm" novalidate>
+        <div class="field-row">
+          <div class="field" id="f-teamName">
+            <label for="teamName">Team or project name</label>
+            <input type="text" id="teamName" placeholder="e.g. Pathwise">
+            <div class="field-error">Give your team a name.</div>
+          </div>
+          <div class="field" id="f-contact">
+            <label for="contact">Contact (email, Discord, etc.)</label>
+            <input type="text" id="contact" placeholder="e.g. you@school.edu">
+            <div class="field-error">Add a way for people to reach you.</div>
+          </div>
+        </div>
+        <div class="field" id="f-idea">
+          <label for="idea">What are you building?</label>
+          <textarea id="idea" placeholder="One or two sentences on the idea"></textarea>
+          <div class="field-error">Describe the idea in a sentence or two.</div>
+        </div>
+        <div class="field" id="f-skills">
+          <label for="skills">Skills you're looking for (comma-separated)</label>
+          <input type="text" id="skills" placeholder="e.g. React, Figma, ML">
+          <div class="field-error">List at least one skill, even "anything."</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Post team</button>
+        <div class="form-status" id="teamStatus">Team posted. It'll show up below.</div>
+      </form>
+    </div>
+
+    <div class="card-grid" id="teamGrid"></div>
+  </div>
+</section>
+
+<section id="showcase">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Project showcase</h2>
+      <p>Once you've submitted, add your project here so people can check out what you built — this is also how judges will browse entries on demo day.</p>
+    </div>
+
+    <div class="form-card">
+      <h3>Submit your project</h3>
+      <div class="sub">Add this once your repo and demo link are live.</div>
+      <form id="projectForm" novalidate>
+        <div class="field-row">
+          <div class="field" id="f-projName">
+            <label for="projName">Project name</label>
+            <input type="text" id="projName" placeholder="e.g. Pathwise">
+            <div class="field-error">Give your project a name.</div>
+          </div>
+          <div class="field" id="f-team2">
+            <label for="team2">Team name</label>
+            <input type="text" id="team2" placeholder="e.g. Night Owls">
+            <div class="field-error">Add your team name.</div>
+          </div>
+        </div>
+        <div class="field" id="f-tagline">
+          <label for="tagline">One-line description</label>
+          <input type="text" id="tagline" placeholder="What does it do, in one sentence?">
+          <div class="field-error">Add a short description.</div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="f-repo">
+            <label for="repo">GitHub repo link</label>
+            <input type="text" id="repo" placeholder="https://github.com/...">
+            <div class="field-error">Add your repo link.</div>
+          </div>
+          <div class="field" id="f-demo">
+            <label for="demo">Live demo link</label>
+            <input type="text" id="demo" placeholder="https://...">
+            <div class="field-error">Add your demo link.</div>
+          </div>
+        </div>
+        <div class="field" id="f-stack">
+          <label for="stack">Tech stack (comma-separated)</label>
+          <input type="text" id="stack" placeholder="e.g. Next.js, Postgres, Python">
+          <div class="field-error">List at least one technology.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add project</button>
+        <div class="form-status" id="projectStatus">Project added to the showcase below.</div>
+      </form>
+    </div>
+
+    <div class="card-grid" id="projectGrid"></div>
+  </div>
+</section>
+
+<section id="prizes">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Prizes</h2>
+      <p>Judged on creativity, UI/UX, functionality, attention to detail, and overall execution — not just how big the idea sounds.</p>
+    </div>
+    <div class="prize-list">
+      <div class="prize">
+        <div class="place">Second place</div>
+        <div class="amount">₹5,000</div>
+        <div class="desc">Second-place team, plus mentorship and bragging rights.</div>
+      </div>
+      <div class="prize first">
+        <div class="place">First place</div>
+        <div class="amount">₹10,000</div>
+        <div class="desc">Best overall submission across all five judging criteria.</div>
+      </div>
+      <div class="prize">
+        <div class="place">Third place</div>
+        <div class="amount">₹3,000</div>
+        <div class="desc">Third-place team, plus mentorship and bragging rights.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Do I need a team before I show up? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No. Post yourself on the team board above, or just show up — team formation happens in the first hour.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is there a theme this year? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">No restrictions on design or features. Build whatever you're genuinely curious about.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Can I start building before the event? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Brainstorming is fine, but the codebase should start fresh when the clock starts Saturday.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What do I need to submit? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">A public GitHub repo and a link to your deployed demo, added to the showcase board above.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How much is the entry fee? <span class="plus">+</span></button>
+        <div class="faq-a"><div class="faq-a-inner">The entry fee is ₹75 per participant.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div>BuildIt · organized by Mozilla Firefox Club.</div>
+    <div><a href="#about">About</a> &nbsp;·&nbsp; <a href="#teams">Teams</a> &nbsp;·&nbsp; <a href="#faq">FAQ</a></div>
+  </div>
+</footer>
+
+<script>
+// ---------- Nav ----------
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen);
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => navLinks.classList.remove('open'));
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navA = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= 120 && rect.bottom > 120) current = sec.id;
+  });
+  navA.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+});
+
+// ---------- Circuit draw-in ----------
+document.querySelectorAll('#circuit .wire').forEach((path, i) => {
+  const len = path.getTotalLength();
+  path.style.strokeDasharray = len;
+  path.style.strokeDashoffset = len;
+  path.animate(
+    [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
+    { duration: 1400, delay: i * 160, fill: 'forwards', easing: 'ease-out' }
+  );
+});
+document.querySelectorAll('#circuit .node').forEach((node, i) => {
+  node.style.opacity = 0;
+  node.animate(
+    [{ opacity: 0 }, { opacity: 1 }],
+    { duration: 400, delay: 900 + i * 60, fill: 'forwards' }
+  );
+});
+
+// ---------- Countdown ----------
+const eventDate = new Date('2026-11-14T09:00:00');
+function updateCountdown(){
+  const now = new Date();
+  let diff = eventDate - now;
+  if (diff < 0) diff = 0;
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff / (1000*60*60)) % 24);
+  const m = Math.floor((diff / (1000*60)) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ---------- FAQ accordion ----------
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// ---------- Storage helpers ----------
+function load(key){
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch(e){ return []; }
+}
+function save(key, data){
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// ---------- Team form ----------
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function renderTeams(){
+  const teams = load('buildit_teams');
+  const grid = document.getElementById('teamGrid');
+  if (teams.length === 0){
+    grid.innerHTML = '<div class="empty-state">No teams posted yet. Be the first — add your idea above and people looking for a project will find you.</div>';
+    return;
+  }
+  grid.innerHTML = teams.slice().reverse().map(t => `
+    <div class="team-card">
+      <h4>${escapeHtml(t.name)}</h4>
+      <div class="idea">${escapeHtml(t.idea)}</div>
+      <div class="tag-row">${t.skills.map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('')}</div>
+      <div class="contact">Contact: <span>${escapeHtml(t.contact)}</span></div>
+    </div>
+  `).join('');
+}
+
+function validateField(fieldId, condition){
+  const field = document.getElementById(fieldId);
+  field.classList.toggle('invalid', !condition);
+  return condition;
+}
+
+document.getElementById('teamForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('teamName').value.trim();
+  const contact = document.getElementById('contact').value.trim();
+  const idea = document.getElementById('idea').value.trim();
+  const skillsRaw = document.getElementById('skills').value.trim();
+
+  const okName = validateField('f-teamName', name.length > 0);
+  const okContact = validateField('f-contact', contact.length > 0);
+  const okIdea = validateField('f-idea', idea.length > 0);
+  const okSkills = validateField('f-skills', skillsRaw.length > 0);
+
+  if (!(okName && okContact && okIdea && okSkills)) return;
+
+  const teams = load('buildit_teams');
+  teams.push({
+    name, contact, idea,
+    skills: skillsRaw.split(',').map(s => s.trim()).filter(Boolean)
+  });
+  save('buildit_teams', teams);
+  renderTeams();
+
+  e.target.reset();
+  const status = document.getElementById('teamStatus');
+  status.classList.add('show');
+  setTimeout(() => status.classList.remove('show'), 3500);
+});
+
+// ---------- Project form ----------
+function renderProjects(){
+  const projects = load('buildit_projects');
+  const grid = document.getElementById('projectGrid');
+  if (projects.length === 0){
+    grid.innerHTML = '<div class="empty-state">No projects submitted yet. Once your repo and demo are live, add them here.</div>';
+    return;
+  }
+  grid.innerHTML = projects.slice().reverse().map(p => `
+    <div class="project-card">
+      <div class="project-plate"></div>
+      <div class="project-body">
+        <h4>${escapeHtml(p.name)}</h4>
+        <div class="tagline">${escapeHtml(p.tagline)}</div>
+        <div class="tag-row">${p.stack.map(s => `<span class="tag">${escapeHtml(s)}</span>`).join('')}</div>
+        <div class="project-links">
+          <a href="${escapeHtml(p.repo)}" target="_blank" rel="noopener">Repo</a>
+          <a href="${escapeHtml(p.demo)}" target="_blank" rel="noopener">Live demo</a>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('projectForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('projName').value.trim();
+  const team = document.getElementById('team2').value.trim();
+  const tagline = document.getElementById('tagline').value.trim();
+  const repo = document.getElementById('repo').value.trim();
+  const demo = document.getElementById('demo').value.trim();
+  const stackRaw = document.getElementById('stack').value.trim();
+
+  const okName = validateField('f-projName', name.length > 0);
+  const okTeam = validateField('f-team2', team.length > 0);
+  const okTagline = validateField('f-tagline', tagline.length > 0);
+  const okRepo = validateField('f-repo', repo.length > 0);
+  const okDemo = validateField('f-demo', demo.length > 0);
+  const okStack = validateField('f-stack', stackRaw.length > 0);
+
+  if (!(okName && okTeam && okTagline && okRepo && okDemo && okStack)) return;
+
+  const projects = load('buildit_projects');
+  projects.push({
+    name, team, tagline, repo, demo,
+    stack: stackRaw.split(',').map(s => s.trim()).filter(Boolean)
+  });
+  save('buildit_projects', projects);
+  renderProjects();
+
+  e.target.reset();
+  const status = document.getElementById('projectStatus');
+  status.classList.add('show');
+  setTimeout(() => status.classList.remove('show'), 3500);
+});
+
+renderTeams();
+renderProjects();
+</script>
+
+</body>
+</html>
